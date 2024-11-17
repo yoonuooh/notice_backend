@@ -9,6 +9,7 @@ connect(`mongodb+srv://${mongo_username}:${mongo_password}@noticeboard.joumi.mon
   .catch(() => console.log("Failed.."))
 
 const noticeSchema = new mongoose.Schema({
+  name: String,
   title: String,
   created_at: String,
   modified_at: String,

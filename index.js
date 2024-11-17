@@ -18,9 +18,10 @@ app.post("/api/insert_data", async (req, res) => {
 
   const now = `${year}-${month}-${day} ${hours}:${minutes}`;
 
-  const { title, content } = req.body;
+  const { name, title, content } = req.body;
   console.log(content);
   const newNotice = new Notice({
+    name: name,
     title: title,
     created_at: now,
     modified_at: now,
