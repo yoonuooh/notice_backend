@@ -1,0 +1,13 @@
+{
+  "name": "notice_board",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "mongoose": "^8.8.1",
+    "mongosh": "^2.3.3",
+    "nodejs": "^0.0.0"
+  }
+}
