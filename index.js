@@ -12,7 +12,7 @@ moment.tz.setDefault("Asia/Seoul");
 
 // Insert Data
 app.post("/api/insert_data", async (req, res) => {
-  const now = moment().format('YYYY-MM-DD HH:mm:ss');
+  const now = moment().format('YYYY-MM-DD HH:mm');
 
   const { name, title, content } = req.body;
   console.log(content);
@@ -82,7 +82,7 @@ app.post("/api/delete_data", async (req, res) => {
 
 // Update Data
 app.post("/api/update_data", async (req, res) => {
-  const now = moment().format('YYYY-MM-DD HH:mm:ss');
+  const now = moment().format('YYYY-MM-DD HH:mm');
 
   const { id, title, content } = req.body;
   try {
