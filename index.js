@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import moment from "moment-timezone"
 import { Notice } from "./connect-db.js"
 
 const app = express();
@@ -7,16 +8,11 @@ const port = 5000;
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 
+moment.tz.setDefault("Asia/Seoul");
+
 // Insert Data
 app.post("/api/insert_data", async (req, res) => {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-
-  const now = `${year}-${month}-${day} ${hours}:${minutes}`;
+  const now = moment().format('YYYY-MM-DD HH:mm:ss');
 
   const { name, title, content } = req.body;
   console.log(content);
@@ -86,14 +82,7 @@ app.post("/api/delete_data", async (req, res) => {
 
 // Update Data
 app.post("/api/update_data", async (req, res) => {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-
-  const now = `${year}-${month}-${day} ${hours}:${minutes}`;
+  const now = moment().format('YYYY-MM-DD HH:mm:ss');
 
   const { id, title, content } = req.body;
   try {
