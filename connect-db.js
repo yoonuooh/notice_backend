@@ -8,11 +8,17 @@ connect(`mongodb+srv://${mongo_username}:${mongo_password}@noticeboard.joumi.mon
   .then(() => console.log("Connected!"))
   .catch(() => console.log("Failed.."))
 
-const noticeSchema = new mongoose.Schema({
+const NoticeSchema = new mongoose.Schema({
   name: String,
   title: String,
   created_at: String,
   modified_at: String,
   content: mongoose.Schema.Types.Mixed,
+  category: String,
 });
-export const Notice = mongoose.model('Document', noticeSchema);
+export const Regulation = mongoose.model('regulation', NoticeSchema);
+export const FreeNotice = mongoose.model('free_notice', NoticeSchema);
+export const Document = mongoose.model('document', NoticeSchema);
+export const Wiki = mongoose.model('wiki', NoticeSchema);
+export const ProjectDashboard = mongoose.model('project_dashboard', NoticeSchema);
+export const DesignAutomation = mongoose.model('design_automation', NoticeSchema);

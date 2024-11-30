@@ -1,7 +1,7 @@
 import express from "express"
 import cors from "cors"
 import moment from "moment-timezone"
-import { Notice } from "./connect-db.js"
+import { Regulation, FreeNotice, Document, Wiki, ProjectDashboard, DesignAutomation } from "./connect-db.js"
 
 const app = express();
 const port = 5000;
@@ -10,18 +10,37 @@ app.use(express.json());
 
 moment.tz.setDefault("Asia/Seoul");
 
+function getModel(category) {
+  switch (category) {
+    case "regulation":
+      return Regulation;
+    case "free-notice":
+      return FreeNotice;
+    case "wiki":
+      return Wiki;
+    case "document":
+      return Document;
+    case "project-dashboard":
+      return ProjectDashboard;
+    case "design-automation":
+      return DesignAutomation;
+    default:
+      throw new Error('Invalid model type');
+  }
+}
+
 // Insert Data
 app.post("/api/insert_data", async (req, res) => {
   const now = moment().format('YYYY-MM-DD HH:mm');
-
-  const { name, title, content } = req.body;
-  console.log(content);
-  const newNotice = new Notice({
+  const { name, title, content, category } = req.body;
+  const Model = getModel(category);
+  const newNotice = new Model({
     name: name,
     title: title,
     created_at: now,
     modified_at: now,
     content: content,
+    category: category,
   });
 
   try {
@@ -35,24 +54,28 @@ app.post("/api/insert_data", async (req, res) => {
 
 // Load All Data
 app.post("/api/load_all_data", async (req, res) => {
+  const { category } = req.body;
+  console.log(category);
   try {
-    const result = await Notice.find({ title: { $exists: true } });
+    const Model = getModel(category);
+    const result = await Model.find();
     if (result) {
       res.json(result);
-      console.log("Load Data Success!");
+      console.log("Load All Data Success!");
     } else {
       res.status(404).json({ message: 'Notice not found' });
     }
   } catch (err) {
-    console.error('Load Data Fail:', err);
+    console.error('Load All Data Fail:', err);
   }
 });
 
 // Load Data
 app.post("/api/load_data", async (req, res) => {
-  const { id } = req.body;
+  const { id, category } = req.body;
   try {
-    const result = await Notice.findById({ _id: id });
+    const Model = getModel(category);
+    const result = await Model.findById({ _id: id });
     if (result) {
       res.json(result);
       console.log("Load Data Success!");
@@ -66,9 +89,10 @@ app.post("/api/load_data", async (req, res) => {
 
 // Delete Data
 app.post("/api/delete_data", async (req, res) => {
-  const { id } = req.body;
+  const { id, category } = req.body;
   try {
-    const result = await Notice.findByIdAndDelete(id);
+    const Model = getModel(category);
+    const result = await Model.findByIdAndDelete(id);
     if (result) {
       res.json(result);
       console.log("Delete Data Success!");
@@ -84,9 +108,10 @@ app.post("/api/delete_data", async (req, res) => {
 app.post("/api/update_data", async (req, res) => {
   const now = moment().format('YYYY-MM-DD HH:mm');
 
-  const { id, title, content } = req.body;
+  const { id, title, content, category } = req.body;
   try {
-    const result = await Notice.updateOne(
+    const Model = getModel(category);
+    const result = await Model.updateOne(
       { _id: id },
       { $set: { title: title, content: content, modified_at: now} }
     );
