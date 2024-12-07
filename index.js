@@ -6,7 +6,7 @@ import { Regulation, FreeNotice, Document, Wiki, ProjectDashboard, DesignAutomat
 const app = express();
 const port = 5000;
 app.use(cors({ origin: '*' }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 moment.tz.setDefault("Asia/Seoul");
 
